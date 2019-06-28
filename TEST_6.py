@@ -81,8 +81,6 @@ for x in range(3):
     all_plots.append([[],[]])
 
 
-print(all_plots)
-
 for run_number, run_group in enumerate(runs):
 
     for key, values in run_group.items():
@@ -104,13 +102,13 @@ plt.title("\n".join(wrap("longlonglonglonglonglonglonglonglonglonglonglonglonglo
 plt.xlabel("Node Names", fontsize = 8)
 plt.ylabel("Run Times", fontsize = 8)
 
-#print(len(csv_file))
-#ticks - x and y axisses' data format.
 
 plt.scatter(all_plots[0][0], all_plots[0][1], c='b', marker='+', label="First")
 plt.scatter(all_plots[1][0], all_plots[1][1], c='g', marker=(5,2), label="Second")
 plt.scatter(all_plots[2][0], all_plots[2][1], c='r', marker=(5,1), label="Third")
 
+
+#ticks - x and y axisses' data format.
 
 plt.xticks(range(len(csv_file))[::25], [item for item in csv_file][::25], rotation=90, size=8)
 
