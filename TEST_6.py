@@ -31,18 +31,68 @@ with open('fileThird.csv', 'r') as f:
     for line in csvreader:
         us_csv_file2.append(line)
 
-#Sorts the files using sorted file's index number - first coumn (x[0])
-us_csv_file.sort(key=lambda x: csv_file.index(x[0]))
-us_csv_file1.sort(key=lambda x: csv_file.index(x[0]))
-us_csv_file2.sort(key=lambda x: csv_file.index(x[0]))
 
-#scatters the symbols on the graph
-plt.scatter(range(len(us_csv_file)), [int(item[1]) for item in us_csv_file], c='b', marker='+', label="First")
-plt.scatter(range(len(us_csv_file1)), [int(item[1]) for item in us_csv_file1], c='g', marker=(5,2), label="Second")
-plt.scatter(range(len(us_csv_file2)), [int(item[1]) for item in us_csv_file2], c='r', marker=(5,1), label="Third")
+runs = []
+
+file_0 = {}
+file_1 = {}
+file_2 = {}
+
+for result in us_csv_file:
+    node_name = result[0]
+    node_value = result[1]
+
+    if file_0.get(node_name):   # If the node exists in the list
+        file_0[node_name].append(node_value)
+    else:
+        file_0[node_name] = [node_value]
+
+runs.append(file_0)
+
+for result in us_csv_file1:
+    node_name = result[0]
+    node_value = result[1]
+
+    if file_1.get(node_name):   # If the node exists in the list
+        file_1[node_name].append(node_value)
+    else:
+        file_1[node_name] = [node_value]
+
+runs.append(file_1)
+
+for result in us_csv_file2:
+    node_name = result[0]
+    node_value = result[1]
+
+    if file_2.get(node_name):   # If the node exists in the list
+        file_2[node_name].append(node_value)
+    else:
+        file_2[node_name] = [node_value]
+
+runs.append(file_2)
+
+
+# all_plots = [[[], []],[[], []],[[], []]]
+
+all_plots = [] # Make an array of 3 arrays, each with a pair of arrays inside
+# Each pair holds the x and y coordinates of the datapoints
+
+for x in range(3):
+    all_plots.append([[],[]])
+
+
+print(all_plots)
+
+for run_number, run_group in enumerate(runs):
+
+    for key, values in run_group.items():
+        sorted_position = csv_file.index(key)
+        for item in values:
+            all_plots[run_number][0].append(sorted_position)
+            all_plots[run_number][1].append(int(item))
 
 #indicates the label names at the given spot
-plt.legend(loc='upper right') 
+plt.legend(loc='upper right')
 
 #Creates grid for x-y axises
 plt.grid(True)
@@ -56,7 +106,15 @@ plt.ylabel("Run Times", fontsize = 8)
 
 #print(len(csv_file))
 #ticks - x and y axisses' data format.
-plt.xticks(np.arange(0,len(csv_file)+1)[::20], csv_file[::20], rotation=90, size=8)
+
+plt.scatter(all_plots[0][0], all_plots[0][1], c='b', marker='+', label="First")
+plt.scatter(all_plots[1][0], all_plots[1][1], c='g', marker=(5,2), label="Second")
+plt.scatter(all_plots[2][0], all_plots[2][1], c='r', marker=(5,1), label="Third")
+
+
+plt.xticks(range(len(csv_file))[::25], [item for item in csv_file][::25], rotation=90, size=8)
+
+
 plt.yticks(np.arange(0,11000,1000), size=8)
 
 #Saves a PNG file of the current graph to the folder and updates it every time
